@@ -17,14 +17,13 @@ import "firebase/auth";
 import {
   FirebaseAuthProvider,
   FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseAuthedAnd
+  IfFirebaseAuthed
 } from "@react-firebase/auth";
 
 import NavBar from './nav/navBar';
-import ToDo from './todo/todo';
 import db from './firebase-config'
 import GoogleSignIn from "./nav/googleSignIn";
+import ToDo from "./todo/ToDo";
 
 // Setting up service woker
 if ('serviceWorker' in navigator) {
@@ -63,7 +62,7 @@ ReactDOM.render(
             <FirebaseAuthConsumer>
               {({ isSignedIn }) => {
                 if (!isSignedIn) {
-                  return <div><h1 id="signIn">Sign in to view and edit your list!</h1>
+                  return <div id="signIn"><h1>Sign in to view and edit your list!</h1>
                   <GoogleSignIn /></div>
                 }
               }}
@@ -71,7 +70,7 @@ ReactDOM.render(
 
             <IfFirebaseAuthed>
               <FirestoreProvider firebase={firebase}>
-                <ToDo />
+                <ToDo db={db}/>
               </FirestoreProvider>
             </IfFirebaseAuthed>
           </Route>

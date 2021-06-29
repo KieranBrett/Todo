@@ -1,11 +1,7 @@
 import React from 'react';
 import firebase from "@firebase/app"
-import { Link } from "react-router-dom";
 import './sideBar.css'
 
-import {
-    FirebaseAuthConsumer
-} from "@react-firebase/auth";
 
 class GoogleSignIn extends React.Component {
     render() {

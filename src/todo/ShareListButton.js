@@ -1,7 +1,4 @@
 import React from 'react';
-import { FirestoreCollection } from 'react-firestore';
-import firebase from "@firebase/app"
-import db from '../firebase-config';
 import EmailForm from './EmailForm';
 
 class ShareListButton extends React.Component {
@@ -23,15 +20,22 @@ class ShareListButton extends React.Component {
   showShareTab() {
     if (this.state.show) {
       return <div class="share-box">
-        <h5>Share list</h5>
+        <h5>Share list<button type="button" class="close close-share" aria-label="Close" onClick={this.onClick}>X</button></h5>
+
         <EmailForm list_id={this.props.list_id} />
       </div>
     }
   }
 
+  showShareButton() {
+    // if (!this.state.show) {
+      return <button onClick={this.onClick} class="btn btn-primary list-button">Share</button>
+    // }
+  }
+
   render() {
     return <div>
-      <button onClick={this.onClick} class="btn btn-primary">Share</button>
+      {this.showShareButton()}
       {this.showShareTab()}
     </div>
   }

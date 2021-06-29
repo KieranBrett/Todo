@@ -12,7 +12,7 @@ class NavBar extends React.Component {
   render() {
     return (
       <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <Link to="/" class="navbar-brand">To Do App!</Link>
+        <Link to="/" class="navbar-brand">To Do</Link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -28,7 +28,6 @@ class NavBar extends React.Component {
               <Link to="/groups" class="nav-link">Groups</Link>
             </li> */}
           </ul>
-
 
           <div class="form-inline my-2">
             <FirebaseAuthConsumer>
@@ -61,9 +60,6 @@ class NavBar extends React.Component {
     firebase.auth().signInWithPopup(googleAuthProvider);
   }
 
-  handleSideBar() {
-    let sideBar = document.getElementsById('sideBar');
-  }
 }
 
 export default NavBar
