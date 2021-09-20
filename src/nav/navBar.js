@@ -3,62 +3,64 @@ import firebase from "@firebase/app"
 import { Link } from "react-router-dom";
 import './sideBar.css'
 
+// Material UI
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import HomeIcon from '@material-ui/icons/Home';
+
 import {
   FirebaseAuthConsumer
 } from "@react-firebase/auth";
 import GoogleSignIn from './googleSignIn';
 
-class NavBar extends React.Component {
-  render() {
-    return (
-      <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <Link to="/" class="navbar-brand">To Do</Link>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <Link to="/" class="nav-link">Home</Link>
-            </li>
-            <li class="nav-item active">
-              <Link to="/todo" class="nav-link">My Lists</Link>
-            </li>
-            {/* <li class="nav-item active">
-              <Link to="/groups" class="nav-link">Groups</Link>
-            </li> */}
-          </ul>
 
-          <div class="form-inline my-2">
-            <FirebaseAuthConsumer>
-              {({ isSignedIn }) => {
-                if (!isSignedIn) { // If the user is authenticated/signed in
-                  // return (<button class="btn btn-outline-light" onClick={this.googleSignIn}>Sign In with Google</button>);
-                  return <GoogleSignIn />
-                }
-                else {
-                  return (<button class="btn btn-outline-light" onClick={this.signOut}>Sign Out</button>);
-                }
-              }}
-            </FirebaseAuthConsumer>
-          </div>
-        </div>
+function signOut() {
+  firebase.auth().signOut();
+}
 
-        <div id="footer">Kieran Brett @ 2021</div>
-      </nav>);
-  }
+function NavBar() {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }));
 
-  signOut() {
-    firebase.auth().signOut();
-  }
-  anonSignIn() {
-    firebase.auth().signInAnonymously();
-  }
+  const classes = useStyles();
 
-  googleSignIn() {
-    const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(googleAuthProvider);
-  }
+  return <AppBar position="static">
+    <Toolbar>
+      <IconButton href="/#/todo" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+        <HomeIcon />
+      </IconButton>
+      <Typography variant="h6" className={classes.title}>
+        To Do
+      </Typography>
+
+      {/* Sign in button */}
+      <FirebaseAuthConsumer>
+        {({ isSignedIn }) => {
+          if (!isSignedIn) { // If the user is authenticated/signed in
+            return <GoogleSignIn />
+          }
+          else {
+            return (<Button color="secondary" size="small" variant="contained" onClick={signOut}>Sign Out</Button>);
+          }
+        }}
+      </FirebaseAuthConsumer>
+
+    </Toolbar>
+  </AppBar>
+
 
 }
 

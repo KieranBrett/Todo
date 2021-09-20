@@ -8,6 +8,8 @@ import SharedList from './SharedList'
 import OwnedList from './OwnedList'
 import NewList from './NewList';
 
+import { Container } from '@material-ui/core';
+
 class ToDo extends React.Component {
   getMyLists() {
     return (<FirestoreCollection
@@ -23,7 +25,7 @@ class ToDo extends React.Component {
             return (<div class="list-pane">
               <h1>Your Lists</h1>
               <NewList db={this.props.db} />
-              <div class="list-container">
+              <div>
                 {data.map(list => {
                   return <OwnedList db={this.props.db} list_id={list.id} list_name={list.list_name} />
                 })}
@@ -74,8 +76,10 @@ class ToDo extends React.Component {
   render() {
     return (
       <div class="row">
-        {this.getMyLists()}
-        {this.getSharedLists()}
+        <Container>
+          {this.getMyLists()}
+          {this.getSharedLists()}
+        </Container>
       </div>);
   }
 }

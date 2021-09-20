@@ -2,10 +2,12 @@ import React from 'react';
 import firebase from "@firebase/app"
 import './sideBar.css'
 
+// Material UI
+import Button from '@material-ui/core/Button';
 
 class GoogleSignIn extends React.Component {
     render() {
-        return (<button class="btn btn-outline-light" onClick={this.googleSignIn}>Sign In with Google</button>);
+        return <Button color="primary" size="small" variant="contained" onClick={this.googleSignIn}>Sign In with Google</Button>
     }
     
     googleSignIn() {

@@ -1,44 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import EmailForm from './EmailForm';
 
-class ShareListButton extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      show: false,
-    }
+// MUI
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
 
-    this.onClick = this.onClick.bind(this)
-  }
+function ShareListButton(props) {
+  const [open, setOpen] = useState(false)
 
-  onClick(e) {
-    this.setState({
-      show: !this.state.show,
-    })
-  }
+  const handleClose = () => {
+    setOpen(null);
+  };
 
-  showShareTab() {
-    if (this.state.show) {
-      return <div class="share-box">
-        <h5>Share list<button type="button" class="close close-share" aria-label="Close" onClick={this.onClick}>X</button></h5>
+  return <><Button onClick={() => { setOpen(!open) }} color="primary" size="small" variant="contained">
+    Share
+  </Button>
 
-        <EmailForm list_id={this.props.list_id} />
-      </div>
-    }
-  }
+    <Dialog
+      open={open}
+      onClose={handleClose}
+    >
+      <DialogTitle>
+        Share List
+      </DialogTitle>
 
-  showShareButton() {
-    // if (!this.state.show) {
-      return <button onClick={this.onClick} class="btn btn-primary list-button">Share</button>
-    // }
-  }
+      <DialogContent>
+        <EmailForm list_id={props.list_id} />
+      </DialogContent>
 
-  render() {
-    return <div>
-      {this.showShareButton()}
-      {this.showShareTab()}
-    </div>
-  }
+      <DialogActions>
+        <Button autoFocus onClick={handleClose} color="primary">
+          Exit
+        </Button>
+
+      </DialogActions>
+    </Dialog>
+  </>
 }
 
 export default ShareListButton

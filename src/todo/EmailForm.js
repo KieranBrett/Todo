@@ -2,6 +2,7 @@ import React from 'react';
 import firebase from "@firebase/app"
 import db from '../firebase-config';
 
+
 class EmailForm extends React.Component {
     constructor() {
         super()
@@ -33,7 +34,7 @@ class EmailForm extends React.Component {
                     if (user.id === firebase.auth().currentUser.uid) {
                         this.setState({
                             email: this.state.email,
-                            message: "You can't share with yourself!",
+                            message: "You can't share with yourself, silly!",
                         })
                     } else {
                         db.collection("lists").doc(this.props.list_id).update({

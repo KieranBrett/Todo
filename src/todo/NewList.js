@@ -1,6 +1,8 @@
 import React from 'react';
 import firebase from "@firebase/app"
 
+import Button from '@material-ui/core/Button';
+
 class NewList extends React.Component {
     constructor(props) {
         super(props)
@@ -32,7 +34,7 @@ class NewList extends React.Component {
         return <form onSubmit={(this.handleSubmit)} class="new-list">
             <h3>Make a new list!</h3>
             <input id="todo_input" type="text" value={this.state.list_name} onChange={(this.handleChange)}></input>
-            <button type="submit" class="btn btn-primary">Create List</button>
+            <Button color="primary" variant="contained" type="submit">Submit</Button>
         </form>
     }
 }

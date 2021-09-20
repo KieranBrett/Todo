@@ -1,7 +1,24 @@
 import React from 'react';
 import { FirestoreCollection } from 'react-firestore';
 
+// Virtual Scrolling
+import { FixedSizeList } from 'react-window';
+
 import ShareListButton from './ShareListButton';
+import Button from '@material-ui/core/Button';
+import DeleteButton from './DeleteButton';
+
+// MUI
+import { ListItem, ListItemText, List, IconButton } from '@material-ui/core';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { DeleteForever } from '@material-ui/icons';
+
+
 
 class OwnedList extends React.Component {
     constructor() {
@@ -43,44 +60,43 @@ class OwnedList extends React.Component {
                         <h2>Loading List...</h2>
                     </div>);
                 } else {
-                    return (<div class="card list mx-auto">
+                    return <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+                            <Typography >
+                                {this.props.list_name}
+                            </Typography>
+                            {/* <Typography sx={{ color: 'text.secondary' }}>Accordion Description</Typography> */}
+                        </AccordionSummary>
 
-                        <div class="card-header">
-                            <h4 class="card-title">{this.props.list_name}</h4>
-                        </div>
+                        <AccordionDetails>
+                            <List dense={true}>
+                                {data.map(todo => {
+                                    return <ListItem>
+                                        <ListItemText>
+                                            {todo.text}
+                                        </ListItemText>
 
-                        <div class="card-body">
-                            <ul>
-                                {data.map(todo => (
-                                    <li class="todo-li" key={todo.id} onClick={(e) => {
-                                        this.props.db.collection("lists").doc(this.props.list_id).collection("todo").doc(todo.id).delete()
-                                    }}>
-                                        {todo.text}
-                                    </li>
-                                ))}
-                            </ul>
+                                        <IconButton onClick={(e) => {
+                                            this.props.db.collection("lists").doc(this.props.list_id).collection("todo").doc(todo.id).delete()
+                                        }}>
+                                            <DeleteForever />
+                                        </IconButton>
+                                    </ListItem>
+                                })}
+                            </List>
 
+
+                        </AccordionDetails>
+
+                        <AccordionActions>
                             <form onSubmit={(this.handleSubmit)} class="todo-form">
                                 <input id="todo_input" type="text" value={this.state.todo} onChange={(this.handleChange)}></input>
-                                <button class="btn btn-success list-button" type="submit">Add</button>
+                                <Button color="primary" size="small" variant="contained" type="submit">Add</Button>
                             </form>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="row">
-                                <ShareListButton list_id={this.props.list_id} />
-                                <button class="btn btn-danger list-button" onClick={(e) => {
-                                    this.props.db.collection('lists').doc(this.props.list_id).collection('todo').get().then((querySnapshot) => {
-                                        querySnapshot.forEach((doc) => {
-                                            doc.ref.delete();
-                                        });
-                                    });
-
-                                    this.props.db.collection("lists").doc(this.props.list_id).delete()
-                                }}>Delete List</button>
-                            </div>
-                        </div>
-                    </div>);
+                            <ShareListButton list_id={this.props.list_id} />
+                            <DeleteButton db={this.props.db} list_id={this.props.list_id} />
+                        </AccordionActions>
+                    </Accordion>
                 }
             }}
         />)
@@ -88,7 +104,7 @@ class OwnedList extends React.Component {
 
     render() {
         return (<div>
-            { this.displayList()}
+            {this.displayList()}
         </div>)
     }
 }
