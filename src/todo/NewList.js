@@ -2,6 +2,8 @@ import React from 'react';
 import firebase from "@firebase/app"
 
 import Button from '@material-ui/core/Button';
+import Input from '@mui/material/Input';
+import TextField from '@mui/material/TextField';
 
 class NewList extends React.Component {
     constructor(props) {
@@ -31,11 +33,10 @@ class NewList extends React.Component {
     }
 
     render() {
-        return <form onSubmit={(this.handleSubmit)} class="new-list">
-            <h3>Make a new list!</h3>
-            <input id="todo_input" type="text" value={this.state.list_name} onChange={(this.handleChange)}></input>
-            <Button color="primary" variant="contained" type="submit">Submit</Button>
-        </form>
+        return <>
+            <TextField placeholder="List Name" label={"Make a new list!"} value={this.state.list_name} onChange={(this.handleChange)} />
+            <Button color="primary" variant="contained" onClick={(this.handleSubmit)}>Submit</Button>
+        </>
     }
 }
 

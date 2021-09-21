@@ -11,6 +11,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@material-ui/core';
+import { red } from '@mui/material/colors';
+
 function DeleteButton(props) {
     const [open, setOpen] = React.useState(false);
 
@@ -23,14 +27,11 @@ function DeleteButton(props) {
     };
 
     return (
-        <>
-            <Button color="secondary" size="small" variant="contained" onClick={handleClickOpen}>
-                Delete
-            </Button>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-            >
+        <><IconButton onClick={handleClickOpen}>
+            <DeleteIcon sx={{ color: red[500] }} />
+        </IconButton>
+
+            <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
                     Delete List
                 </DialogTitle>

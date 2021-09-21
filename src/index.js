@@ -58,28 +58,28 @@ ReactDOM.render(
       <div id="content">
 
         <Switch>
-          <Route path="/todo">
+          <Route path="/*">
             <FirebaseAuthConsumer>
               {({ isSignedIn }) => {
                 if (!isSignedIn) {
                   return <div id="signIn"><h1>Sign in to view and edit your list!</h1>
-                  <GoogleSignIn /></div>
+                    <GoogleSignIn /></div>
                 }
               }}
             </FirebaseAuthConsumer>
 
             <IfFirebaseAuthed>
               <FirestoreProvider firebase={firebase}>
-                <ToDo db={db}/>
+                <ToDo db={db} />
               </FirestoreProvider>
             </IfFirebaseAuthed>
           </Route>
 
-          <Route path="/*">
+          {/* <Route path="/*">
             <h1>Welcome to the To Do App!</h1>
 
             <Link to="/todo" class="btn btn-success">Go to ToDo App!</Link>
-          </Route>
+          </Route> */}
         </Switch>
       </div>
     </Router>

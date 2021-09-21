@@ -9,6 +9,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 
+import ShareIcon from '@mui/icons-material/Share';
+import { IconButton } from '@material-ui/core';
+
 function ShareListButton(props) {
   const [open, setOpen] = useState(false)
 
@@ -16,9 +19,9 @@ function ShareListButton(props) {
     setOpen(null);
   };
 
-  return <><Button onClick={() => { setOpen(!open) }} color="primary" size="small" variant="contained">
-    Share
-  </Button>
+  return <><IconButton onClick={() => { setOpen(!open) }}>
+    <ShareIcon color="primary" />
+  </IconButton>
 
     <Dialog
       open={open}

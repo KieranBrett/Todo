@@ -17,13 +17,12 @@ class ToDo extends React.Component {
       filter={['owner_id', '==', firebase.auth().currentUser.uid]}
       render={({ isLoading, data }) => {
         if (isLoading) {
-          return (<div class="list-pane">
+          return (<div>
             <h1>Loading...</h1>
           </div>);
         } else {
           if (data.length > 0) {
-            return (<div class="list-pane">
-              <h1>Your Lists</h1>
+            return (<div>
               <NewList db={this.props.db} />
               <div>
                 {data.map(list => {
@@ -33,7 +32,7 @@ class ToDo extends React.Component {
             </div>);
           }
           else {
-            return <div class="list-pane">
+            return <div >
               <h1>No Lists</h1>
               <NewList db={this.props.db} />
             </div>
@@ -54,9 +53,9 @@ class ToDo extends React.Component {
           </div>);
         } else {
           if (data.length > 0) {
-            return <div class="list-pane">
+            return <div>
               <h1>Shared Lists</h1>
-              <div class="list-container">
+              <div>
                 {data.map(list => {
                   return <SharedList list_id={list.id} list_name={list.list_name} />
                 })}
@@ -64,7 +63,7 @@ class ToDo extends React.Component {
             </div>
           }
           else {
-            return <div class="list-pane">
+            return <div>
               <h6>Shared lists will appear here</h6>
             </div>
           }

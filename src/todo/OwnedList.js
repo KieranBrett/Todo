@@ -16,7 +16,12 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { DeleteForever } from '@material-ui/icons';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { red } from '@mui/material/colors';
+
+import TextField from '@mui/material/TextField';
 
 
 
@@ -79,7 +84,7 @@ class OwnedList extends React.Component {
                                         <IconButton onClick={(e) => {
                                             this.props.db.collection("lists").doc(this.props.list_id).collection("todo").doc(todo.id).delete()
                                         }}>
-                                            <DeleteForever />
+                                            <DeleteIcon fontSize="small" sx={{ color: red[500] }} />
                                         </IconButton>
                                     </ListItem>
                                 })}
@@ -89,10 +94,10 @@ class OwnedList extends React.Component {
                         </AccordionDetails>
 
                         <AccordionActions>
-                            <form onSubmit={(this.handleSubmit)} class="todo-form">
-                                <input id="todo_input" type="text" value={this.state.todo} onChange={(this.handleChange)}></input>
-                                <Button color="primary" size="small" variant="contained" type="submit">Add</Button>
-                            </form>
+                            <TextField placeholder="To Do" label={"Whats there To Do?"} value={this.state.todo} onChange={(this.handleChange)} />
+                            <IconButton onClick={(this.handleSubmit)}>
+                                <AddCircleIcon color="success" />
+                            </IconButton>
                             <ShareListButton list_id={this.props.list_id} />
                             <DeleteButton db={this.props.db} list_id={this.props.list_id} />
                         </AccordionActions>
