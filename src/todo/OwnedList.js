@@ -44,15 +44,56 @@ class OwnedList extends React.Component {
     }
 
     handleSubmit(e) {
-        this.props.db.collection("lists").doc(this.props.list_id).collection("todo").add({
-            text: this.state.todo
-        })
+        if (this.state.todo != '') {
+            this.props.db.collection("lists").doc(this.props.list_id).collection("todo").add({
+                text: this.state.todo,
+                date: Date.now()
+            })
 
-        this.setState({
-            todo: ''
-        })
-
+            this.setState({
+                todo: ''
+            })
+        }
         e.preventDefault();
+    }
+
+    calculateDate(createTime) {
+        var created_date = new Date(createTime)
+        var current_date = new Date()
+        var mil = current_date - created_date
+
+        var seconds = (mil / 1000) | 0;
+        mil -= seconds * 1000;
+
+        var minutes = (seconds / 60) | 0;
+        seconds -= minutes * 60;
+
+        var hours = (minutes / 60) | 0;
+        minutes -= hours * 60;
+
+        var days = (hours / 24) | 0;
+        hours -= days * 24;
+
+        var weeks = (days / 7) | 0;
+        days -= weeks * 7;
+
+        return [weeks, days, hours]
+    }
+
+    dateString(createTime) {
+        var times = this.calculateDate(createTime)
+
+        return `${times[0] > 0 ? `${times[0]} Weeks, ` : ''} 
+                ${times[1] > 0 ? `${times[1]} Days and ` : ''} 
+                ${[times[2]] > 0 ? `${times[2]} Hours` : ''}`
+    }
+
+    dateColour(createTime) {
+        var times = this.calculateDate(createTime)
+
+        if (times[0] >= 1) {
+            return "#FF0000"
+        }
     }
 
     displayList() {
@@ -70,16 +111,14 @@ class OwnedList extends React.Component {
                             <Typography >
                                 {this.props.list_name}
                             </Typography>
-                            {/* <Typography sx={{ color: 'text.secondary' }}>Accordion Description</Typography> */}
                         </AccordionSummary>
 
                         <AccordionDetails>
                             <List dense={true}>
                                 {data.map(todo => {
                                     return <ListItem>
-                                        <ListItemText>
-                                            {todo.text}
-                                        </ListItemText>
+                                        <ListItemText primary={todo.text} secondary={
+                                            <Typography variant='caption' style={{ color: this.dateColour(todo.date) }}>{this.dateString(todo.date)}</Typography>} />
 
                                         <IconButton onClick={(e) => {
                                             this.props.db.collection("lists").doc(this.props.list_id).collection("todo").doc(todo.id).delete()
