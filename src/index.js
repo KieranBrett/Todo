@@ -26,6 +26,7 @@ import GoogleSignIn from "./nav/googleSignIn";
 import ToDo from "./todo/ToDo";
 
 // Setting up service woker
+// Service worker needs to uninstall the old one and install the new one, every time!!!!!!
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then({
@@ -39,6 +40,7 @@ if ('serviceWorker' in navigator) {
   })
 }
 
+// Auth State Change (Create new users in the Database)
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     db.collection("users").doc(user.uid).set({
@@ -74,12 +76,6 @@ ReactDOM.render(
               </FirestoreProvider>
             </IfFirebaseAuthed>
           </Route>
-
-          {/* <Route path="/*">
-            <h1>Welcome to the To Do App!</h1>
-
-            <Link to="/todo" class="btn btn-success">Go to ToDo App!</Link>
-          </Route> */}
         </Switch>
       </div>
     </Router>
