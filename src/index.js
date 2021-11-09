@@ -23,7 +23,7 @@ import {
 import NavBar from './nav/navBar';
 import db from './firebase-config'
 import GoogleSignIn from "./nav/googleSignIn";
-import ToDo from "./todo/ToDo";
+import ToDo from "./todo/todo";
 
 // Setting up service woker
 // Service worker needs to uninstall the old one and install the new one, every time!!!!!!

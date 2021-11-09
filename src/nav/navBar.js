@@ -1,22 +1,18 @@
-import React from 'react';
-import firebase from "@firebase/app"
+import React from "react";
+import firebase from "@firebase/app";
 import { Link } from "react-router-dom";
-import './sideBar.css'
+import "./sideBar.css";
 
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import HomeIcon from '@material-ui/icons/Home';
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import HomeIcon from "@material-ui/icons/Home";
 
-import {
-  FirebaseAuthConsumer
-} from "@react-firebase/auth";
-import GoogleSignIn from './googleSignIn';
-
+import Sidebar from "./Sidebar";
 
 function signOut() {
   firebase.auth().signOut();
@@ -37,31 +33,30 @@ function NavBar() {
 
   const classes = useStyles();
 
-  return <AppBar position="static">
-    <Toolbar>
-      <IconButton href="/#/todo" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-        <HomeIcon />
-      </IconButton>
-      <Typography variant="h6" className={classes.title}>
-        To Do
-      </Typography>
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton
+          href="/#/todo"
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+        >
+          <HomeIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          To Do
+        </Typography>
 
-      {/* Sign in button */}
-      <FirebaseAuthConsumer>
-        {({ isSignedIn }) => {
-          if (!isSignedIn) { // If the user is authenticated/signed in
-            return <GoogleSignIn />
-          }
-          else {
-            return (<Button color="secondary" size="small" variant="contained" onClick={signOut}>Sign Out</Button>);
-          }
-        }}
-      </FirebaseAuthConsumer>
+        {/* Side panel? */}
+        <Sidebar />
 
-    </Toolbar>
-  </AppBar>
-
-
+        {/* Sign in button */}
+        
+      </Toolbar>
+    </AppBar>
+  );
 }
 
-export default NavBar
+export default NavBar;
