@@ -87,7 +87,7 @@ ReactDOM.render(
             <IfFirebaseAuthed>
               <FirestoreProvider firebase={firebase}>
 
-                <ThemeProvider theme={darkTheme}>
+                <ThemeProvider theme={lightTheme}>
                   <CssBaseline />
                   <ToDo db={db} />
                 </ThemeProvider>
