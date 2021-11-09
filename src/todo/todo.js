@@ -9,6 +9,7 @@ import OwnedList from './OwnedList'
 import NewList from './NewList';
 
 import { Container } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 class ToDo extends React.Component {
   getMyLists() {
@@ -54,7 +55,7 @@ class ToDo extends React.Component {
         } else {
           if (data.length > 0) {
             return <div>
-              <h1>Shared Lists</h1>
+              <Typography>Shared Lists</Typography>
               <div>
                 {data.map(list => {
                   return <SharedList list_id={list.id} list_name={list.list_name} />
