@@ -3,7 +3,7 @@ import firebase from "@firebase/app";
 import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import "./index.css";
-
+ 
 import { FirestoreProvider } from "react-firestore";
 import "@firebase/firestore";
 import firebaseConfig from "./firebase-config";
@@ -20,7 +20,6 @@ import GoogleSignIn from "./nav/googleSignIn";
 import ToDo from "./todo/todo";
 
 // Theme
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 import Container from "@mui/material/Container";
 

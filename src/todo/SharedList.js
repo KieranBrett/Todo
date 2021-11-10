@@ -13,25 +13,36 @@ class SharedList extends React.Component {
           </div>);
         } else {
           return (
-                <div class="card list mx-auto">
+            <div class="card list mx-auto">
 
-                        <div class="card-header">
-                            <h4 class="card-title">{this.props.list_name}</h4>
-                        </div>
+              <div class="card-header">
+                <h4 class="card-title">{this.props.list_name}</h4>
+                
+                {/* Make sure this is only used when testing firebase rules, not to be deployed */}
+                {/* { this.delete_button()} */}
 
-                        <div class="card-body">
-                            <ul>
-                                {data.map(todo => (
-                                    <li key={todo.id}>{todo.text} </li>
-                                ))}
-                            </ul>
-                        </div>
+              </div>
 
-                        <div class="card-footer"></div>
-                    </div>);
+              <div class="card-body">
+                <ul>
+                  {data.map(todo => (
+                    <li key={todo.id}>{todo.text} </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="card-footer"></div>
+            </div>);
         }
       }}
     />)
+  }
+
+  // This is a button just for testing
+  delete_button() {
+    return <button onClick={() => {
+      this.props.db.collection("lists").doc(this.props.list_id).delete();
+    }}>Delete this users list!!! MUAH HA HAAAA</button>
   }
 }
 
