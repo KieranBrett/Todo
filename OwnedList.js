@@ -128,6 +128,8 @@ class OwnedList extends React.Component {
                                     </ListItem>
                                 })}
                             </List>
+
+
                         </AccordionDetails>
 
                         <AccordionActions>

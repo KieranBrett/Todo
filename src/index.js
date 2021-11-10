@@ -1,9 +1,8 @@
 import * as React from "react";
 import firebase from "@firebase/app";
 import ReactDOM from "react-dom";
-import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
+// import "./index.css";
 
 import { FirestoreProvider } from "react-firestore";
 import "@firebase/firestore";
@@ -21,8 +20,9 @@ import GoogleSignIn from "./nav/googleSignIn";
 import ToDo from "./todo/todo";
 
 // Theme
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+// import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
+import Container from "@mui/material/Container";
 
 // Service worker needs to uninstall the old one and install the new one, every time!!!!!!
 if ("serviceWorker" in navigator) {
@@ -63,41 +63,32 @@ const lightTheme = createTheme({
 })
 
 ReactDOM.render(
-  <FirebaseAuthProvider {...firebaseConfig} firebase={firebase}>
-    <Router>
-      <FirebaseAuthConsumer>
-        <NavBar />
-      </FirebaseAuthConsumer>
-      <div id="content">
-        <Switch>
-          <Route path="/*">
-            <FirebaseAuthConsumer>
-              {({ isSignedIn }) => {
-                if (!isSignedIn) {
-                  return (
-                    <div id="signIn">
-                      <h1>Sign in to view and edit your list!</h1>
-                      <GoogleSignIn />
-                    </div>
-                  );
-                }
-              }}
-            </FirebaseAuthConsumer>
+    <ThemeProvider theme={lightTheme}>
+      <CssBaseline />
+      <FirebaseAuthProvider {...firebaseConfig} firebase={firebase}>
+        <FirebaseAuthConsumer>
+          <NavBar />
+        </FirebaseAuthConsumer>
+        <FirebaseAuthConsumer>
+          {({ isSignedIn }) => {
+            if (!isSignedIn) {
+              return (
+                <div id="signIn">
+                  <h1>Sign in to view and edit your list!</h1>
+                  <GoogleSignIn />
+                </div>
+              );
+            }
+          }}
+        </FirebaseAuthConsumer>
 
-            <IfFirebaseAuthed>
-              <FirestoreProvider firebase={firebase}>
+        <IfFirebaseAuthed>
+          <FirestoreProvider firebase={firebase}>
+            <ToDo db={db} />
 
-                <ThemeProvider theme={lightTheme}>
-                  <CssBaseline />
-                  <ToDo db={db} />
-                </ThemeProvider>
-
-              </FirestoreProvider>
-            </IfFirebaseAuthed>
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-  </FirebaseAuthProvider>,
+          </FirestoreProvider>
+        </IfFirebaseAuthed>
+      </FirebaseAuthProvider>
+    </ThemeProvider>,
   document.getElementById("root")
 );

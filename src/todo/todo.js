@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from "@firebase/app"
 import { FirestoreCollection } from 'react-firestore';
 
-import './list.css'
+// import './list.css'
 
 import SharedList from './SharedList'
 import OwnedList from './OwnedList'
@@ -25,11 +25,9 @@ class ToDo extends React.Component {
           if (data.length > 0) {
             return (<div>
               <NewList db={this.props.db} />
-              <div>
                 {data.map(list => {
                   return <OwnedList db={this.props.db} list_id={list.id} list_name={list.list_name} />
                 })}
-              </div>
             </div>);
           }
           else {
@@ -74,13 +72,10 @@ class ToDo extends React.Component {
   }
 
   render() {
-    return (
-      <div class="row">
-        <Container>
-          {this.getMyLists()}
-          {this.getSharedLists()}
-        </Container>
-      </div>);
+    return <Container>
+      {this.getMyLists()}
+      {this.getSharedLists()}
+    </Container>
   }
 }
 

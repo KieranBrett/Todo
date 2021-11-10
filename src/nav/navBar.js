@@ -1,6 +1,5 @@
 import React from "react";
 import firebase from "@firebase/app";
-import "./sideBar.css";
 
 // Material UI
 import { makeStyles } from "@material-ui/core/styles";
