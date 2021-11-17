@@ -13,22 +13,17 @@ class SharedList extends React.Component {
           </div>);
         } else {
           return (
-                <div class="card list mx-auto">
-
-                        <div class="card-header">
-                            <h4 class="card-title">{this.props.list_name}</h4>
-                        </div>
-
-                        <div class="card-body">
-                            <ul>
-                                {data.map(todo => (
-                                    <li key={todo.id}>{todo.text} </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div class="card-footer"></div>
-                    </div>);
+            <div class="card list mx-auto">
+              <h4 class="card-title">{this.props.list_name} (Shared List)</h4>
+              <div class="card-body">
+                <ul>
+                  {data.map(todo => (
+                    <li key={todo.id}>{todo.text} </li>
+                  ))}
+                </ul>
+              </div>
+              <div class="card-footer"></div>
+            </div>);
         }
       }}
     />)

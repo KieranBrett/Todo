@@ -24,19 +24,20 @@ import ToDo from "./todo/todo";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 import Container from "@mui/material/Container";
 
-// Service worker needs to uninstall the old one and install the new one, every time!!!!!!
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").then({
-      function(registration) {
-        console.log("success: ", registration);
-      },
-      function(err) {
-        console.log("failed: ", err);
-      },
-    });
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((registration) => {
+        console.log("SW registered: ", registration);
+      })
+      .catch((registrationError) => {
+        console.log("SW registration failed: ", registrationError);
+      });
   });
 }
+
+
 
 // Auth State Change (Create new users in the Database)
 firebase.auth().onAuthStateChanged((user) => {
