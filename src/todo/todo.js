@@ -56,7 +56,8 @@ class ToDo extends React.Component {
               <Typography>Shared Lists</Typography>
               <div>
                 {data.map(list => {
-                  return <SharedList list_id={list.id} list_name={list.list_name} />
+                  // DB is only needed for testing at the moment
+                  return <SharedList list_id={list.id} list_name={list.list_name} db={this.props.db}/>
                 })}
               </div>
             </div>
