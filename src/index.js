@@ -1,94 +1,30 @@
-import * as React from "react";
-import firebase from "@firebase/app";
-import ReactDOM from "react-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import "./index.css";
- 
-import { FirestoreProvider } from "react-firestore";
-import "@firebase/firestore";
-import firebaseConfig from "./firebase-config";
-import "firebase/auth";
-import {
-  FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-} from "@react-firebase/auth";
+// scroll bar
+import 'simplebar/src/simplebar.css';
 
-import NavBar from "./nav/navBar";
-import db from "./firebase-config";
-import GoogleSignIn from "./nav/googleSignIn";
-import ToDo from "./todo/todo";
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
-// Theme
-import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
-import Container from "@mui/material/Container";
+//
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import reportWebVitals from './reportWebVitals';
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./sw.js")
-      .then((registration) => {
-        console.log("SW registered: ", registration);
-      })
-      .catch((registrationError) => {
-        console.log("SW registration failed: ", registrationError);
-      });
-  });
-}
-
-
-
-// Auth State Change (Create new users in the Database)
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    db.collection("users").doc(user.uid).set({
-      name: user.displayName,
-      email: user.email,
-      id: user.uid,
-    });
-  }
-});
-
-// Creating Themes
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
-const lightTheme = createTheme({
-  palette: {
-    mode: "light",
-  },
-})
+// ----------------------------------------------------------------------
 
 ReactDOM.render(
-    <ThemeProvider theme={lightTheme}>
-      <CssBaseline />
-      <FirebaseAuthProvider {...firebaseConfig} firebase={firebase}>
-        <FirebaseAuthConsumer>
-          <NavBar />
-        </FirebaseAuthConsumer>
-        <FirebaseAuthConsumer>
-          {({ isSignedIn }) => {
-            if (!isSignedIn) {
-              return (
-                <div id="signIn">
-                  <h1>Sign in to view and edit your list!</h1>
-                  <GoogleSignIn />
-                </div>
-              );
-            }
-          }}
-        </FirebaseAuthConsumer>
-
-        <IfFirebaseAuthed>
-          <FirestoreProvider firebase={firebase}>
-            <ToDo db={db} />
-
-          </FirestoreProvider>
-        </IfFirebaseAuthed>
-      </FirebaseAuthProvider>
-    </ThemeProvider>,
-  document.getElementById("root")
+  <HelmetProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </HelmetProvider>,
+  document.getElementById('root')
 );
+
+// If you want to enable client cache, register instead.
+serviceWorker.unregister();
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
