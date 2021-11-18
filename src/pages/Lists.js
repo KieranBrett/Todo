@@ -18,7 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 
-
+import {AppTasks} from '../components/_dashboard/app';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -29,17 +29,27 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dash
 import USERLIST from '../_mocks_/user';
 
 
-export default function User() {
+export default function Lists() {
+  const [lists, setLists] = useState(null);
   const auth = getAuth();
   const db = getFirestore();
 
+  const q = query(collection(db, 'lists'), where('owner_id', "==", auth.currentUser ? auth.currentUser.uid : null));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const lists = [];
+    querySnapshot.forEach((doc) => {
+      lists.push(doc.data());
+    })
+
+    setLists(lists);
+  })
 
   return (
     <Page title="Lists | MakeaToDo">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Your Lists
           </Typography>
           <Button
             variant="contained"
@@ -52,14 +62,16 @@ export default function User() {
               })
             }}
           >
-            Add to database
+            Create a new List
           </Button>
         </Stack>
-
-        <Card>
-          <h1>Hello</h1>
-        </Card>
+        
+        {lists ? lists.map((list) => <h1>{list.list_name}</h1>) : null}
       </Container>
     </Page>
   );
+}
+
+function showListName() {
+
 }

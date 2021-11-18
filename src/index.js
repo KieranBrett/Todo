@@ -13,6 +13,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
 
+import './index.css'
+
 
 initializeApp(firebaseConfig);
 
@@ -20,11 +22,16 @@ initializeApp(firebaseConfig);
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
-  <HelmetProvider>
+  <>
+    <div className="comingSoon">
+      <h1>Big things are coming</h1>
+    </div>
+    <HelmetProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-  </HelmetProvider>,
+    </HelmetProvider>
+  </>,
   document.getElementById('root')
 );
 

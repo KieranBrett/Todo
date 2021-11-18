@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
 import Blog from './pages/Blog';
-import User from './pages/User';
+import Lists from './pages/Lists';
 import NotFound from './pages/Page404';
 
 // ----------------------------------------------------------------------
@@ -21,7 +21,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/app/list" replace /> },
         // { path: 'app', element: <DashboardApp /> },
-        { path: 'list', element: <User /> }
+        { path: 'list', element: <Lists /> }
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]
