@@ -5,10 +5,12 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 //
 import shape from './shape';
-import palette from './palette';
+import palette, { CHART_COLORS } from './palette';
 import typography from './typography';
 import componentsOverride from './overrides';
 import shadows, { customShadows } from './shadows';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +30,11 @@ export default function ThemeConfig({ children }) {
     []
   );
 
+
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark'
+      mode: 'dark',
+      chart: CHART_COLORS
     },
     shape,
     typography,
@@ -38,12 +42,13 @@ export default function ThemeConfig({ children }) {
     customShadows
   });
 
+
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={true ? theme : darkTheme}>
+      <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         {children}
       </ThemeProvider>

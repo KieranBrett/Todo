@@ -1,9 +1,14 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+
+// FIREBASE
+import { doc, setDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { getAuth } from 'firebase/auth';
+
 // material
 import {
   Card,
@@ -20,6 +25,8 @@ import {
   TableContainer,
   TablePagination
 } from '@mui/material';
+
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -29,15 +36,40 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dash
 //
 import USERLIST from '../_mocks_/user';
 
+
+
+const ToDoList = [{
+  idh: 2,
+  avatarUrl: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+  name: 'Brett',
+  company: 'Brett',
+  isVerified: true
+},
+{
+  id: 3,
+  avatarUrl: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+  name: 'Breaaaaaaaaaaatt',
+  company: 'Brett',
+  isVerified: true,
+  status: 'active',
+  role: 'admin'
+},
+{
+  id: 4,
+  avatarUrl: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+  name: 'Bretdddt',
+  company: 'Brett',
+  isVerified: true,
+  status: 'active',
+  role: 'admin'
+}]
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
+  { id: 'list_name', label: 'Name', alignRight: false },
+  { id: 'owner_id', label: 'Owner', alignRight: false },
+  { id: 'read_access', label: 'Access', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -72,6 +104,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+  const auth = getAuth();
+  const db = getFirestore();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -131,8 +165,21 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const lists = [];
+
+  const q = query(collection(db, "lists"), where("owner_id", "==", "ah9IthewpYe73qnXWJdShrHclos2"));
+  const listSnap = onSnapshot(q, (snapshot) => {
+    // const lists = [];
+    snapshot.forEach((doc) => {
+      lists.push(doc.data());
+    })
+
+  })
+
+  console.log(lists, "List here");
+
   return (
-    <Page title="User | Minimal-UI">
+    <Page title="Lists | MakeaToDo">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -143,8 +190,13 @@ export default function User() {
             component={RouterLink}
             to="#"
             startIcon={<Icon icon={plusFill} />}
+            onClick={() => {
+              setDoc(doc(db, "testers", "Sup"), {
+                name: "Sup"
+              })
+            }}
           >
-            New User
+            Add to database
           </Button>
         </Stack>
 
@@ -168,16 +220,15 @@ export default function User() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  {/* {lists.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { listName, ownerId, readAccess } = row;
+                      
+                      const isItemSelected = selected.indexOf(listName) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -186,27 +237,13 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, listName)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
+                            <Typography variant="subtitle2" noWrap>
+                              {listName}
+                            </Typography>
                           </TableCell>
 
                           <TableCell align="right">
@@ -214,22 +251,19 @@ export default function User() {
                           </TableCell>
                         </TableRow>
                       );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
+                    })} */}
+
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    role="checkbox"
+                  // selected={isItemSelected}
+                  // aria-checked={isItemSelected}
+                  >
+                    <h1>{lists}</h1>
+                    {console.log(lists.length)}
+                  </TableRow>
                 </TableBody>
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
               </Table>
             </TableContainer>
           </Scrollbar>

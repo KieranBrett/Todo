@@ -85,7 +85,7 @@ const GRADIENTS = {
   error: createGradient(ERROR.light, ERROR.main)
 };
 
-const CHART_COLORS = {
+export const CHART_COLORS = {
   violet: ['#826AF9', '#9E86FF', '#D0AEFF', '#F7D2FF'],
   blue: ['#2D99FF', '#83CFFF', '#A5F3FF', '#CCFAFF'],
   green: ['#2CD9C5', '#60F1C8', '#A4F7CC', '#C0F2DC'],

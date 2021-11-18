@@ -6,21 +6,24 @@ import { FirebaseAuthProvider } from '@react-firebase/auth';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseConfig from './firebase-config';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
 
+
 initializeApp(firebaseConfig);
+
 
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
   <HelmetProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
   </HelmetProvider>,
   document.getElementById('root')
 );

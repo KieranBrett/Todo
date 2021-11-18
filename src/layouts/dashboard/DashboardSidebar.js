@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
@@ -11,8 +11,10 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 //
-import sidebarConfig from './SidebarConfig';
+import sidebarConfig, { loginConfig } from './SidebarConfig';
 import account from '../../_mocks_/account';
+
+import GuestNavigate from './GuessNav';
 
 // ----------------------------------------------------------------------
 
@@ -83,6 +85,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <NavSection navConfig={sidebarConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
+
+      {/* { auth.currentUser ? null : <NavSection navConfig={loginConfig}/>} */}
+      <GuestNavigate />
+      
     </Scrollbar>
   );
 
@@ -116,8 +122,4 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </MHidden>
     </RootStyle>
   );
-}
-
-function profilePictureUrl(auth) {
-  return auth.currentUser ? auth.currentUser.photoURL : account.photoURL
 }
