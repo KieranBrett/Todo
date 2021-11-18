@@ -58,13 +58,13 @@ function TaskItem({ task, checked, formik, ...other }) {
   );
 }
 
-export default function AppTasks() {
+export default function AppTasks(props) {
   // const [lists, setLists] = React.useState('');
   // const [loading, setLoading] = React.useState(true);
 
   const formik = useFormik({
     initialValues: {
-      checked: [TASKS[2]]
+      checked: []
     },
     onSubmit: (values) => {
       console.log(values);
@@ -75,11 +75,11 @@ export default function AppTasks() {
 
   return (
     <Card>
-      <CardHeader title="Tasks" />
+      <CardHeader title={props.list_name} />
       <Box sx={{ px: 3, py: 1 }}>
         <FormikProvider value={formik}>
           <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            {TASKS.map((task) => (
+            {props.list.map((task) => (
               <TaskItem
                 key={task}
                 task={task}

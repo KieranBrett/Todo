@@ -69,7 +69,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppTasks />
+            <AppTasks list={['hi']} list_name="hello" />
           </Grid>
         </Grid>
       </Container>
