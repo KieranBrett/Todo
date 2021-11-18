@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
@@ -29,7 +30,7 @@ const AccountStyle = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: theme.shape.borderRadiusSm,
-  backgroundColor: theme.palette.grey[200]
+  // backgroundColor: theme.palette.primary.main,
 }));
 
 // ----------------------------------------------------------------------
@@ -41,6 +42,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const auth = getAuth();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -65,13 +67,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={auth.currentUser ? auth.currentUser.photoURL : account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {auth.currentUser ? auth.currentUser.displayName : 'Guest'}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                {auth.currentUser ? auth.currentUser.email : null}
               </Typography>
             </Box>
           </AccountStyle>
@@ -114,4 +116,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </MHidden>
     </RootStyle>
   );
+}
+
+function profilePictureUrl(auth) {
+  return auth.currentUser ? auth.currentUser.photoURL : account.photoURL
 }

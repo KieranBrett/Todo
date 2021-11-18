@@ -3,16 +3,20 @@ import { useRef, useState } from 'react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate  } from 'react-router-dom';
 // material
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
+import { getAuth } from 'firebase/auth';
 // components
 import MenuPopover from '../../components/MenuPopover';
+
 //
 import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
+
+
 
 const MENU_OPTIONS = [
   {
@@ -32,6 +36,8 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(true);
@@ -62,7 +68,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={auth.currentUser ? auth.currentUser.photoURL : account.photoURL} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -73,10 +79,11 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {/* Name */}
+            {auth.currentUser ? auth.currentUser.displayName : 'Guest'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {auth.currentUser ? auth.currentUser.email : null}
           </Typography>
         </Box>
 
@@ -104,11 +111,20 @@ export default function AccountPopover() {
           </MenuItem>
         ))}
 
-        <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+        { auth.currentUser ? <Box sx={{ p: 2, pt: 1.5 }}>
+          <Button fullWidth color="inherit" variant="outlined" onClick={() => {
+            auth.signOut();
+            handleClose();  
+            
+            navigate('/login');
+          }}>
             Logout
           </Button>
-        </Box>
+        </Box> : <Box sx={{ p: 2, pt: 1.5 }}>
+          <RouterLink to="/login">
+            <Button fullWidth color="inherit" variant="outlined" >Login</Button>
+          </RouterLink>
+        </Box>}
       </MenuPopover>
     </>
   );

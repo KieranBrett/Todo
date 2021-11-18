@@ -1,14 +1,18 @@
 // scroll bar
 import 'simplebar/src/simplebar.css';
+import { initializeApp } from 'firebase/app';
+import { FirebaseAuthProvider } from '@react-firebase/auth';
 
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-
+import firebaseConfig from './firebase-config';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
+
+initializeApp(firebaseConfig);
 
 // ----------------------------------------------------------------------
 

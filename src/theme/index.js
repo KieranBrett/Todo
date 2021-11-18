@@ -28,12 +28,22 @@ export default function ThemeConfig({ children }) {
     []
   );
 
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark'
+    },
+    shape,
+    typography,
+    shadows,
+    customShadows
+  });
+
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={true ? theme : darkTheme}>
         <CssBaseline />
         {children}
       </ThemeProvider>
