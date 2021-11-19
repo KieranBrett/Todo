@@ -11,62 +11,66 @@ import { doc, setDoc, addDoc, getFirestore, collection, query, where, onSnapshot
 import { getAuth } from '@firebase/auth';
 
 export default function CreateList() {
-  const [open, setOpen] = React.useState(false);
-  const [ name, setName ] = React.useState('');
-  const db = getFirestore();
-  const auth = getAuth();
+    const [open, setOpen] = React.useState(false);
+    const [name, setName] = React.useState('');
+    const db = getFirestore();
+    const auth = getAuth();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-  const handleSubmit = () => {
+    const handleSubmit = () => {
+        addList(db, name, auth);
+
+        setOpen(false);
+    };
+
+    const _handleChange = (event) => {
+        setName(event.target.value);
+    }
+
+    return (
+        <div>
+            <Button variant="contained" onClick={handleClickOpen}>
+                Create new List
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Create New List</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please enter your new list name below.
+                    </DialogContentText>
+                    <TextField
+                        onChange={_handleChange}
+                        value={name}
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="List Name"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleSubmit}>Create</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
+async function addList(db, name, auth) {
     addDoc(collection(db, "lists"), {
         list_name: name,
         owner_id: auth.currentUser.uid,
         read_access: [],
         todo: []
     })
-
-    setOpen(false);
-  };
-
-  const _handleChange = (event) => {
-      setName(event.target.value);
-  }
-
-  return (
-    <div>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Create new List
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create New List</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter your new list name below.
-          </DialogContentText>
-          <TextField
-            onChange={_handleChange}
-            value={name}
-            autoFocus
-            margin="dense"
-            id="name"
-            label="List Name"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Create</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
 }

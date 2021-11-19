@@ -59,27 +59,8 @@ export default function Lists() {
 }
 
 function List(props) {
-  const [todos, setTodos] = useState(null);
-  const auth = getAuth();
-  const db = getFirestore();
+  return <Grid item xs={12} sm={6} md={3}>
+    <AppTasks list={props.list[1].todo} list_id={props.list[0]} list_name={props.list[1].list_name} />
+  </Grid>
 
-  const d = "lists/".concat(props.list[0]).concat("/todo")
-
-  const q = query(collection(db, d));
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const todos = [];
-    querySnapshot.forEach((doc) => {
-      // console.log(doc.id)
-      todos.push([doc.id, doc.data()]);
-    })
-
-    setTodos(todos);
-  })
-
-  if (todos) {
-    return <Grid item xs={12} sm={6} md={3}>
-      <AppTasks list={todos} list_id={props.list[0]} list_name={props.list[1].list_name} />
-      </Grid>
-  }
-  return <h1>Loading...</h1>
 }
