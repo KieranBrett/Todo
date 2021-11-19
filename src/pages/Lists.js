@@ -1,10 +1,7 @@
-import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, Suspense } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
-
 // FIREBASE
 import { doc, setDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
 import { getAuth } from 'firebase/auth';
@@ -16,17 +13,16 @@ import {
   Button,
   Container,
   Typography,
+  Box,
+  Grid,
 } from '@mui/material';
 
-import {AppTasks} from '../components/_dashboard/app';
+import CreateList from '../components/list/CreateList';
+
+
+import { AppTasks } from '../components/_dashboard/app';
 // components
 import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
-//
-import USERLIST from '../_mocks_/user';
 
 
 export default function Lists() {
@@ -38,7 +34,8 @@ export default function Lists() {
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const lists = [];
     querySnapshot.forEach((doc) => {
-      lists.push(doc.data());
+      // console.log(doc.id)
+      lists.push([doc.id, doc.data()]);
     })
 
     setLists(lists);
@@ -51,27 +48,38 @@ export default function Lists() {
           <Typography variant="h4" gutterBottom>
             Your Lists
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-            onClick={() => {
-              setDoc(doc(db, "testers", "Sup"), {
-                name: "Sup"
-              })
-            }}
-          >
-            Create a new List
-          </Button>
+          <CreateList />
         </Stack>
-        
-        {lists ? lists.map((list) => <h1>{list.list_name}</h1>) : null}
+        <Grid container spacing={3}>
+          {lists ? lists.map((list) => <List list={list} />) : null}
+        </Grid>
       </Container>
     </Page>
   );
 }
 
-function showListName() {
+function List(props) {
+  const [todos, setTodos] = useState(null);
+  const auth = getAuth();
+  const db = getFirestore();
 
+  const d = "lists/".concat(props.list[0]).concat("/todo")
+
+  const q = query(collection(db, d));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const todos = [];
+    querySnapshot.forEach((doc) => {
+      // console.log(doc.id)
+      todos.push([doc.id, doc.data()]);
+    })
+
+    setTodos(todos);
+  })
+
+  if (todos) {
+    return <Grid item xs={12} sm={6} md={3}>
+      <AppTasks list={todos} list_id={props.list[0]} list_name={props.list[1].list_name} />
+      </Grid>
+  }
+  return <h1>Loading...</h1>
 }

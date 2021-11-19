@@ -1,5 +1,5 @@
 import { React } from 'react';
-
+import { doc, deleteDoc, setDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
@@ -10,8 +10,15 @@ import {
   CardHeader,
   Typography,
   FormControlLabel,
-  Stack
+  Stack,
+  Button
 } from '@mui/material';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // ----------------------------------------------------------------------
 
@@ -25,70 +32,41 @@ const TASKS = [
 
 // ----------------------------------------------------------------------
 
-TaskItem.propTypes = {
-  task: PropTypes.string,
-  checked: PropTypes.bool,
-  formik: PropTypes.object
-};
-
-function TaskItem({ task, checked, formik, ...other }) {
-  const { getFieldProps } = formik;
-
-  return (
-    <Stack direction="row" justifyContent="space-between" sx={{ py: 0.75 }}>
-      <FormControlLabel
-        control={
-          <Checkbox {...getFieldProps('checked')} value={task} checked={checked} {...other} />
-        }
-        label={
-          <Typography
-            variant="body2"
-            sx={{
-              ...(checked && {
-                color: 'text.disabled',
-                textDecoration: 'line-through'
-              })
-            }}
-          >
-            {task}
-          </Typography>
-        }
-      />
-    </Stack>
-  );
-}
 
 export default function AppTasks(props) {
   // const [lists, setLists] = React.useState('');
   // const [loading, setLoading] = React.useState(true);
-
-  const formik = useFormik({
-    initialValues: {
-      checked: []
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    }
-  });
-
-  const { values, handleSubmit } = formik;
+  const db = getFirestore();
 
   return (
     <Card>
-      <CardHeader title={props.list_name} />
+      <CardHeader title={<div>
+        {props.list_name}
+
+        <IconButton edge="end" aria-label="delete" onClick={() => {
+          console.log("del list")
+        }}>
+          <DeleteIcon />
+        </IconButton>
+      </div>
+      } />
       <Box sx={{ px: 3, py: 1 }}>
-        <FormikProvider value={formik}>
-          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            {props.list.map((task) => (
-              <TaskItem
-                key={task}
-                task={task}
-                formik={formik}
-                checked={values.checked.includes(task)}
-              />
-            ))}
-          </Form>
-        </FormikProvider>
+        <List>
+          {props.list.map((task) => (
+            <ListItem secondaryAction={
+              <IconButton edge="end" aria-label="delete" onClick={() => {
+                console.log(props.list_id)
+                const path = "lists/".concat(props.list_id).concat("/todo/").concat(task[0]);
+                deleteDoc(db, path);
+              }}>
+                <DeleteIcon />
+              </IconButton>
+            }>
+              <ListItemText primary={task[1].text} />
+
+            </ListItem>
+          ))}
+        </List>
       </Box>
     </Card>
   );
