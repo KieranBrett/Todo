@@ -1,23 +1,16 @@
 import { React } from 'react';
-import { doc, deleteDoc, setDoc, updateDoc, arrayRemove, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
-import PropTypes from 'prop-types';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { doc, updateDoc, arrayRemove, getFirestore } from "firebase/firestore";
+
 // material
 import {
   Box,
   Card,
-  Checkbox,
-  CardHeader,
-  Typography,
-  FormControlLabel,
-  Stack,
-  Button
+  CardHeader
 } from '@mui/material';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteList from './DeleteList';
@@ -29,7 +22,7 @@ export default function UserList(props) {
   const db = getFirestore();
 
   return (
-    <Card>
+    <Card sx={{height: '100%'}}>
       <CardHeader title={<div>
         {props.list_name}
 
@@ -40,7 +33,7 @@ export default function UserList(props) {
       <Box sx={{ px: 3, py: 1 }}>
         <List>
           {props.list.map((task) => (
-            <ListItem secondaryAction={
+            <ListItem key={task} secondaryAction={
               <IconButton edge="end" aria-label="delete" onClick={() => {
                 updateDoc(doc(db, 'lists', props.list_id), {
                   todo: arrayRemove(task)

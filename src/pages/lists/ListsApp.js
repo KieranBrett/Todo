@@ -1,21 +1,15 @@
-import { Icon } from '@iconify/react';
-import { useState, useEffect, Suspense } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+
 // FIREBASE
-import { doc, setDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 import { getAuth } from 'firebase/auth';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 // material
 import {
-  Card,
   Stack,
-  Button,
   Container,
   Typography,
-  Box,
   Grid,
 } from '@mui/material';
 
@@ -29,7 +23,6 @@ import Page from '../../components/Page';
 
 
 export default function Lists() {
-  const auth = getAuth();
   const db = getFirestore();
 
   const [value, loading, error] = useCollection(
@@ -49,6 +42,7 @@ export default function Lists() {
           <CreateList />
         </Stack>
         <Grid container spacing={3}>
+          {error && <Grid item xs={12} sm={12} md={12}><h1>Error Loading Data</h1></Grid>}
           {loading && <Grid item xs={12} sm={6} md={4}><h1>Loading...</h1></Grid>}
           {value && value.docs.map(list => <List key={list.id} list={[list.id, list.data()]} />)}
         </Grid>

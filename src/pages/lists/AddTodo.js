@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import { doc, setDoc, addDoc, updateDoc, arrayUnion, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, getFirestore, collection } from "firebase/firestore";
 import { getAuth } from '@firebase/auth';
 
 export default function AddTodo(props) {

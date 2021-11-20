@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { addDoc, getFirestore, collection } from "firebase/firestore";
 import { getAuth } from '@firebase/auth';
 
 export default function CreateList() {
@@ -25,7 +25,7 @@ export default function CreateList() {
         setOpen(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
         addDoc(colRef, {
             list_name: name,
             owner_id: auth.currentUser.uid,
