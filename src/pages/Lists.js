@@ -1,10 +1,13 @@
 import { Icon } from '@iconify/react';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // FIREBASE
 import { doc, setDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
 import { getAuth } from 'firebase/auth';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
+
 
 // material
 import {
@@ -26,21 +29,33 @@ import Page from '../components/Page';
 
 
 export default function Lists() {
-  const [lists, setLists] = useState(null);
+  const [lists, setLists] = useState([]);
+  const [loading, setLoading] = useState(true);
   const auth = getAuth();
   const db = getFirestore();
 
-  const q = query(collection(db, 'lists'), where('owner_id', "==", auth.currentUser ? auth.currentUser.uid : null));
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const lists = [];
-    querySnapshot.forEach((doc) => {
-      // console.log(doc.id)
-      lists.push([doc.id, doc.data()]);
+  useEffect(() => {
+    const q = query(collection(db, 'lists'), where('owner_id', "==", auth.currentUser ? auth.currentUser.uid : null));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newLists = [];
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.id)
+        newLists.push([doc.id, doc.data()]);
+      })
+
+      setLists(newLists);
+      if (loading) {
+        setLoading(false);
+      }
+      console.log("...")
     })
 
-    setLists(lists);
+    return () => unsubscribe();
   })
 
+  // if (loading) {
+  //   return <h1>Loading...</h1>
+  // }
   return (
     <Page title="Lists | MakeaToDo">
       <Container>

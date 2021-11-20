@@ -15,6 +15,7 @@ export default function CreateList() {
     const [name, setName] = React.useState('');
     const db = getFirestore();
     const auth = getAuth();
+    const colRef = collection(db, "lists");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -24,8 +25,13 @@ export default function CreateList() {
         setOpen(false);
     };
 
-    const handleSubmit = () => {
-        addList(db, name, auth);
+    const handleSubmit = (e) => {
+        addDoc(colRef, {
+            list_name: name,
+            owner_id: auth.currentUser.uid,
+            read_access: [],
+            todo: []
+        })
 
         setOpen(false);
     };
@@ -64,13 +70,4 @@ export default function CreateList() {
             </Dialog>
         </div>
     );
-}
-
-async function addList(db, name, auth) {
-    addDoc(collection(db, "lists"), {
-        list_name: name,
-        owner_id: auth.currentUser.uid,
-        read_access: [],
-        todo: []
-    })
 }
