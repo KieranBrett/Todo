@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "advanced-app-dev",
-    "appDev": "advanced-app-dev"
+    "default": "makeatodo"
   }
 }
