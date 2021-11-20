@@ -7,10 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+import { doc, setDoc, addDoc, updateDoc, arrayUnion, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
 import { getAuth } from '@firebase/auth';
 
-export default function CreateList() {
+export default function AddTodo(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
     const db = getFirestore();
@@ -26,13 +29,11 @@ export default function CreateList() {
     };
 
     const handleSubmit = (e) => {
-        addDoc(colRef, {
-            list_name: name,
-            owner_id: auth.currentUser.uid,
-            read_access: [],
-            todo: []
+        updateDoc(doc(db, 'lists', props.list_id), {
+            todo: arrayUnion(name)
         })
 
+        setName('')
         setOpen(false);
     };
 
@@ -41,15 +42,15 @@ export default function CreateList() {
     }
 
     return (
-        <div>
-            <Button variant="contained" onClick={handleClickOpen}>
-                Create new List
-            </Button>
+        <>
+            <IconButton edge="end" aria-label="delete" onClick={handleClickOpen}>
+                <AddCircleIcon />
+            </IconButton>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Create New List</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Please enter your new list name below.
+                        Please enter your new Todo.
                     </DialogContentText>
                     <TextField
                         onChange={_handleChange}
@@ -57,7 +58,7 @@ export default function CreateList() {
                         autoFocus
                         margin="dense"
                         id="name"
-                        label="List Name"
+                        label="Todo"
                         type="email"
                         fullWidth
                         variant="standard"
@@ -68,6 +69,6 @@ export default function CreateList() {
                     <Button onClick={handleSubmit}>Create</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }

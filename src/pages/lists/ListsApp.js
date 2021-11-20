@@ -8,7 +8,6 @@ import { getAuth } from 'firebase/auth';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 
-
 // material
 import {
   Card,
@@ -20,42 +19,26 @@ import {
   Grid,
 } from '@mui/material';
 
-import CreateList from '../components/list/CreateList';
+import CreateList from './CreateList';
 
 
-import { AppTasks } from '../components/_dashboard/app';
+import UserList from './UserList'
+// import { AppTasks } from '../../components/_dashboard/app';
 // components
-import Page from '../components/Page';
+import Page from '../../components/Page';
 
 
 export default function Lists() {
-  const [lists, setLists] = useState([]);
-  const [loading, setLoading] = useState(true);
   const auth = getAuth();
   const db = getFirestore();
 
-  useEffect(() => {
-    const q = query(collection(db, 'lists'), where('owner_id', "==", auth.currentUser ? auth.currentUser.uid : null));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const newLists = [];
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.id)
-        newLists.push([doc.id, doc.data()]);
-      })
+  const [value, loading, error] = useCollection(
+    collection(db, 'lists'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  )
 
-      setLists(newLists);
-      if (loading) {
-        setLoading(false);
-      }
-      console.log("...")
-    })
-
-    return () => unsubscribe();
-  })
-
-  // if (loading) {
-  //   return <h1>Loading...</h1>
-  // }
   return (
     <Page title="Lists | MakeaToDo">
       <Container>
@@ -66,7 +49,8 @@ export default function Lists() {
           <CreateList />
         </Stack>
         <Grid container spacing={3}>
-          {lists ? lists.map((list) => <List list={list} />) : null}
+          {loading && <Grid item xs={12} sm={6} md={4}><h1>Loading...</h1></Grid>}
+          {value && value.docs.map(list => <List key={list.id} list={[list.id, list.data()]} />)}
         </Grid>
       </Container>
     </Page>
@@ -74,8 +58,9 @@ export default function Lists() {
 }
 
 function List(props) {
-  return <Grid item xs={12} sm={6} md={3}>
-    <AppTasks list={props.list[1].todo} list_id={props.list[0]} list_name={props.list[1].list_name} />
+  console.log(props)
+  return <Grid item xs={12} sm={6} md={4}>
+    <UserList list={props.list[1].todo} list_id={props.list[0]} list_name={props.list[1].list_name} />
   </Grid>
 
 }
