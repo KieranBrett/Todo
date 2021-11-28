@@ -25,11 +25,14 @@ import Page from '../../components/Page';
 export default function Lists() {
   const db = getFirestore();
 
+  // const [value, loading, error] = useCollection(
+  //   collection(db, 'lists'),
+  //   {
+  //     snapshotListenOptions: { includeMetadataChanges: true },
+  //   }
+  // )
   const [value, loading, error] = useCollection(
-    collection(db, 'lists'),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
+    collection(db, 'lists')
   )
 
   return (
