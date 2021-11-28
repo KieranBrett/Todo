@@ -5,7 +5,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Lists from './pages/lists/ListsApp';
+import ListsApp from './pages/lists/ListsApp';
 import NotFound from './pages/Page404';
 
 // ----------------------------------------------------------------------
@@ -18,7 +18,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/app/list" replace /> },
         // { path: 'app', element: <DashboardApp /> },
-        { path: 'list', element: <Lists /> }
+        { path: 'list', element: <ListsApp /> }
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]

@@ -1,9 +1,10 @@
 
 // FIREBASE
-import { getFirestore, collection } from "firebase/firestore";
+import { getFirestore, collection, query, where } from "firebase/firestore";
 import { getAuth } from 'firebase/auth';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
+
 
 // material
 import {
@@ -25,14 +26,14 @@ import Page from '../../components/Page';
 export default function Lists() {
   const db = getFirestore();
 
-  // const [value, loading, error] = useCollection(
-  //   collection(db, 'lists'),
-  //   {
-  //     snapshotListenOptions: { includeMetadataChanges: true },
-  //   }
-  // )
+  const listRef = collection(db, "lists")
+  const q = getAuth().currentUser ? query(listRef, where("owner_id", "==", getAuth().currentUser.uid)) : null;
+  
   const [value, loading, error] = useCollection(
-    collection(db, 'lists')
+    q,
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
   )
 
   return (
@@ -55,7 +56,7 @@ export default function Lists() {
 }
 
 function List(props) {
-  console.log(props)
+  // console.log(props)
   return <Grid item xs={12} sm={6} md={4}>
     <UserList list={props.list[1].todo} list_id={props.list[0]} list_name={props.list[1].list_name} />
   </Grid>
