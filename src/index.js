@@ -18,17 +18,15 @@ initializeApp(firebaseConfig);
 
 // ----------------------------------------------------------------------
 
-// if ("serviceWorker" in navigator) {
-//   window.addEventListener("load", () => {
-//     navigator.serviceWorker.register("/sw.js").then((reg) => {
-//       console.log("SW registered: ", reg);
-//     }, (err) => {
-//       console.log("SW registration failed: ", err);
-//     });
-//   });
-// }
-
-// register service worker
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").then((reg) => {
+      console.log("SW registered: ", reg);
+    }, (err) => {
+      console.log("SW registration failed: ", err);
+    });
+  });
+}
 
 // ----------------------------------------------------------------------
 
