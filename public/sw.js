@@ -57,3 +57,5 @@ self.addEventListener('fetch', function(event) {
         })
     );
 });
+
+// fetch event with cache backup
